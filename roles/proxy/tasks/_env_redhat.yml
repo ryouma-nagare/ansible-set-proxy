@@ -1,0 +1,30 @@
+- name: unset proxy env
+  lineinfile:
+    dest: /etc/profile.d/proxy.sh
+    regexp: "{{ item.regexp }}"
+    state: absent
+  with_items:
+  - regexp: '^export http_proxy='
+  - regexp: '^export https_proxy='
+  - regexp: '^export HTTP_PROXY='
+  - regexp: '^export HTTPS_PROXY='
+
+- set_fact:
+    block1: []
+
+- name: create proxy env
+  set_fact:
+    block1: "{{ block1 }} + ['export {{ item }}=http://{{ proxy_host }}:{{ proxy_port }}/']"
+  with_items:
+    - http_proxy
+    - https_proxy
+    - HTTP_PROXY
+    - HTTPS_PROXY
+
+- name: set proxy env
+  blockinfile:
+    dest: /etc/profile.d/proxy.sh
+    block: "{{ block1 | join('\n') }}"
+    create: yes
+    insertafter: EOF
+  when: is_set_proxy

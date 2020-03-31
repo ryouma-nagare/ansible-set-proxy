@@ -1,0 +1,13 @@
+- name: unset yum proxy
+  lineinfile:
+    dest: /etc/yum.conf
+    regexp: '^proxy='
+    state: absent
+
+- name: set yum proxy
+  lineinfile:
+    dest: /etc/yum.conf
+    create: yes
+    insertafter: EOF
+    line: "proxy=http://{{ proxy_host }}:{{ proxy_port }}/"
+  when: is_set_proxy

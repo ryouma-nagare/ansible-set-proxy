@@ -1,0 +1,19 @@
+- name: unset wget proxy
+  lineinfile:
+    dest: /etc/wgetrc
+    regexp: "{{ item.regexp }}"
+    state: absent
+  with_items:
+  - regexp: '^http_proxy ='
+  - regexp: '^https_proxy ='
+
+- name: set wget proxy
+  lineinfile:
+    dest: /etc/wgetrc
+    state: present
+    insertafter: '^#{{ item }}'
+    line: '{{ item }} = http://{{ proxy_host }}:{{ proxy_port }}/'
+  with_items:
+    - http_proxy
+    - https_proxy
+  when: is_set_proxy

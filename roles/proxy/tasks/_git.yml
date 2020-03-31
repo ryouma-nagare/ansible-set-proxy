@@ -1,0 +1,15 @@
+- name: unset git proxy
+  command: "git config --global --unset {{ item }}.proxy"
+  with_items:
+    - http
+    - https
+  register:
+    result
+  failed_when: result.rc not in [0, 5]
+
+- name: set git proxy
+  command: "git config --global {{ item }}.proxy http://{{ proxy_host }}:{{ proxy_port }}/"
+  with_items:
+    - http
+    - https
+  when: is_set_proxy

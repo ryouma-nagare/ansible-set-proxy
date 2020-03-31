@@ -1,0 +1,2 @@
+[allserver]
+server-1   ansible_host=your_ip ansible_ssh_user=your_name ansible_ssh_pass=your_pass ansible_su_pass=your_root_pass

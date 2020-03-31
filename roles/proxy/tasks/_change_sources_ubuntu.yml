@@ -1,0 +1,5 @@
+- name: change sources.list for 18.04.X
+  replace:
+    path: /etc/apt/sources.list
+    regexp: '^deb http://(.*) main$'
+    replace: 'deb http://\1 main restricted universe multiverse'

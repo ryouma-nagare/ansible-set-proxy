@@ -1,0 +1,16 @@
+- name: install for debian
+  package:
+    name:
+      - "python-apt"
+      - "python-selinux"
+      - "selinux-policy-default"
+      - "git"
+      - "subversion"
+      - "wget"
+      - "curl"
+    state: latest
+    update_cache: yes
+
+- name: disable selinux
+  selinux:
+    state: disabled

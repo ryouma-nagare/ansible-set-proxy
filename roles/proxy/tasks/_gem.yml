@@ -1,0 +1,13 @@
+- name: unset gem proxy
+  lineinfile:
+    dest: ~/.gemrc
+    regexp: '^http_proxy:'
+    state: absent
+
+- name: set gem proxy
+  lineinfile:
+    dest: ~/.gemrc
+    create: yes
+    insertafter: EOF
+    line: "http_proxy: http://{{ proxy_host }}:{{ proxy_port }}/"
+  when: is_set_proxy

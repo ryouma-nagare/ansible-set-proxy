@@ -1,0 +1,9 @@
+#
+# setproxy on RHEL/CentOS/Ubuntu/Debian
+#
+- hosts: allserver
+  become: yes
+  become_user: root
+#  become_method: su
+  roles:
+    - proxy

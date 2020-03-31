@@ -1,0 +1,23 @@
+- name: unset svn proxy
+  lineinfile:
+    dest: ~/.subversion/servers
+    regexp: "{{ item.regexp }}"
+    state: absent
+  with_items:
+  - regexp: '^http-proxy-host ='
+  - regexp: '^http-proxy-port ='
+
+- name: svn help for mkdir ~/.subversion/
+  command: "svn help"
+
+- name: set svn proxy
+  lineinfile:
+    dest: ~/.subversion/servers
+    state: present
+    insertafter: '^# {{ item.param }}'
+    line: "{{ item.param }} = {{ item.value }}"
+  with_items:
+    - { param: 'http-proxy-host' , value: '{{ proxy_host }}' }
+    - { param: 'http-proxy-port' , value: '{{ proxy_port }}' }
+  failed_when: false
+  when: is_set_proxy

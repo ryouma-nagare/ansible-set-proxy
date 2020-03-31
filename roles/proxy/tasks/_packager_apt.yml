@@ -1,0 +1,13 @@
+- name: remove apt.conf.d/99proxy
+  file:
+    path: /etc/apt/apt.conf.d/99proxy
+    state: absent
+
+- name: apt.conf.d/99proxy
+  template:
+    src: 99proxy.j2
+    dest: /etc/apt/apt.conf.d/99proxy
+    owner: root
+    group: root
+    mode: 0644
+  when: is_set_proxy

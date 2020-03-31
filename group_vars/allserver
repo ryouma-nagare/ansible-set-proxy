@@ -1,0 +1,3 @@
+is_set_proxy: true
+proxy_host: XXX.XXX.XXX.XXX
+proxy_port: XXXX

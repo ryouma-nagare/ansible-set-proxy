@@ -1,0 +1,30 @@
+- name: unset proxy env
+  lineinfile:
+    dest: /etc/environment
+    regexp: "{{ item.regexp }}"
+    state: absent
+  with_items:
+  - regexp: '^http_proxy='
+  - regexp: '^https_proxy='
+  - regexp: '^HTTP_PROXY='
+  - regexp: '^HTTPS_PROXY='
+
+- set_fact:
+    block1: []
+
+- name: create proxy env
+  set_fact:
+    block1: "{{ block1 }} + ['{{ item }}=http://{{ proxy_host }}:{{ proxy_port }}/']"
+  with_items:
+    - http_proxy
+    - https_proxy
+    - HTTP_PROXY
+    - HTTPS_PROXY
+
+- name: set proxy env
+  blockinfile:
+    dest: /etc/environment
+    block: "{{ block1 | join('\n') }}"
+    create: yes
+    insertafter: EOF
+  when: is_set_proxy

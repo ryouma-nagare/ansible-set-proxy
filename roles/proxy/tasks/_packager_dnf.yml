@@ -1,0 +1,14 @@
+- name: unset dnf proxy
+  lineinfile:
+    dest: /etc/dnf/dnf.conf
+    regexp: '^proxy='
+    state: absent
+  ignore_errors: yes
+
+- name: set dnf proxy
+  lineinfile:
+    dest: /etc/dnf/dnf.conf
+    insertafter: EOF
+    line: "proxy=http://{{ proxy_host }}:{{ proxy_port }}/"
+  when: is_set_proxy
+  ignore_errors: yes

@@ -1,0 +1,17 @@
+- name: install for redhat
+  package:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - "libselinux-python"
+    - "python3-libselinux"
+    - "git"
+    - "subversion"
+    - "wget"
+    - "curl"
+  ignore_errors: yes
+
+- name: disable selinux
+  selinux:
+    state: disabled
